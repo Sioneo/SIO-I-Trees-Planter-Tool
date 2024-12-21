@@ -1,0 +1,8 @@
+{
+  "id": "$Sio1_PluginManifest_dnswodn48",
+  "version": 2,
+  "title": "SIO I: Trees Planter Tool",
+  "text": "Version 1.0\nSpecial thanks to the TheoTown Team, for more information, please visit https://github.com/Sioneo/SIO-I-Trees-Planter-Tool[zh]1.0版本\n感谢TheoTown Team在GitHub上的开源代码，这为本插件提供了很大帮助，谢谢！\n本插件允许自由转载，关于更多信息，请访问https://github.com/Sioneo/SIO-I-Trees-Planter-Tool",
+  "author": "dnswodn&TheoTown Team",
+  "thumbnail": "preview.png"
+}
