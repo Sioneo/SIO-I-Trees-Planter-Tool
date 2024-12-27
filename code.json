@@ -16,7 +16,7 @@
     "meta": {
       "luawrapper": {
         "script": "sio1.lua",
-        "dev": true
+        "dev": false
       }
     }
   },
@@ -28,7 +28,7 @@
     "meta": {
       "luawrapper": {
         "script": "settings.lua",
-        "dev": true
+        "dev": false
       }
     }
   },
