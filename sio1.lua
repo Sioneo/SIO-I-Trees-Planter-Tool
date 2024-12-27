@@ -1,26 +1,15 @@
--- SIO I: Trees Planter Tool, Version 1.0
+-- SIO I: Trees Planter Tool, Version 1.0.2
 -- Note: Highlighted tiles = flags
-local language = tonumber(TheoTown.getGlobalFunVar("!Sio1Language", 1))
-local translations = { -- Table of translations
-    { -- English
-        density = "Density", close = "Close", plant = "Plant", trees = "Trees…",
-        clear = "Clear", help = "Help", about = "About",
-		aboutText = "Thanks for using SIO I: Trees Planter Tool!\n\nHow to use?\n1.Tap on a tile to confirm the start of the area that you want to plant trees.\n2.Tap on another tile to confirm the end of the area.\n3.Click the Plant button to plant trees.\n\nPlguin Information\nSIO I: Trees Planter Tool is a plugin which made by dnswodn&TheoTown Team.\nPlugin Version: 1.0\n\nThis plugin was made using the open source codes which made by TheoTown Team, you can check them on https://github.com/TheoTown-Team/TreePlanterTool, I am grateful for the contributions of the open source community, thank you very much!",
-		noMoney = "No enough money to plant trees",
-		areaOverSize = "Area Oversize, maximum is 400 tiles"
-    },
-    { -- Simplified Chinese
-        density = "密度", close = "关闭", plant = "种树", trees = "种类…",
-        clear = "清除", help = "帮助", about = "关于",
-		aboutText = "感谢使用SIO I: Trees Planter Tool!\n\n如何使用?\n1.点击一个格子以确定种植区域的起点\n2.点击第二个格子以确定种植区域的终点\n3.点击种植按钮以种植树木\n\n关于本插件\nSIO I: Trees Planter Tool 是一个由dnswodn(Bilibili上的Sioneo)和TheoTown Team(提供的开源代码)开发的插件\n插件版本: 1.0\n\n本插件使用了TheoTown Team在GitHub上的开源代码, 链接: https://github.com/TheoTown-Team/TreePlanterTool, 十分感谢开源代码, 这为本插件提供了很大帮助",
-		noMoney = "没钱了", areaOverSize = "区域过大，最大400格"
-    },
-    { -- Traditional Chinese 
-        density = "密度", close = "關閉", plant = "種植", trees = "種類…",
-        clear = "清除", help = "幫助", about = "關於",
-		aboutText = "感謝使用SIO I: Trees Planter Tool!\n\n如何使用?\n1.點擊一個格子以確定種植區域的起點\n2.點擊第二個格子以確定種植區域的終點\n3.點擊種植按鈕以種植樹木\n\n關於本插件\nSIO I: Trees Planter Tool 是一個由dnswodn(Bilibili上的Sioneo)和TheoTown Team(提供的開源代碼)開發的插件\n插件版本: 1.0\n\n本插件使用了TheoTown Team在GitHub上的開源代碼, 鏈接: https://github.com/TheoTown-Team/TreePlanterTool, 十分感謝開源代碼, 這為本插件提供了很大幫助",
-		noMoney = "沒錢了", areaOverSize = "區域過大，最大400格"
-    }
+local strings = { -- Table of strings
+    density = "Density[zh]密度", 
+    close = "Close[zh]关闭", 
+    plant = "Plant[zh]种植", 
+    trees = "Trees…[zh]种类…", 
+    clear = "Clear[zh]清除", 
+    about = "About[zh]关于",
+    aboutText = "Thanks for using SIO I: Trees Planter Tool!\n\nHow to use?\n1.Tap on a tile to confirm the start of the area that you want to plant trees.\n2.Tap on another tile to confirm the end of the area.\n3.Click the Plant button to plant trees.\n\nPlugin Information\nSIO I: Trees Planter Tool is a plugin which made by dnswodn&TheoTown Team.\nPlugin Version: 1.0\n\nThis plugin was made using the open source codes which made by TheoTown Team, you can check them on https://github.com/TheoTown-Team/TreePlanterTool, I am grateful for the contributions of the open source community, thank you very much![zh]感谢使用SIO I: Trees Planter Tool!\n\n如何使用?\n1.点击一个格子以确定种植区域的起点\n2.点击第二个格子以确定种植区域的终点\n3.点击种植按钮以种植树木\n\n关于本插件\nSIO I: Trees Planter Tool 是一个由dnswodn(Bilibili上的Sioneo)和TheoTown Team(提供的开源代码)开发的插件\n插件版本: 1.0\n\n本插件使用了TheoTown Team在GitHub上的开源代码, 链接: https://github.com/TheoTown-Team/TreePlanterTool, 十分感谢开源代码, 这为本插件提供了很大帮助",
+    noMoney = "No enough money to plant trees[zh]没钱了", 
+    areaOverSize = "Area Oversize, maximum is 400 tiles[zh]区域过大，最大400格"
 }
 
 local buttonSizeList = {
@@ -43,7 +32,7 @@ local lastTapPosition = {
 }
 local selectedPositions = {}
 local selectedTrees, originalTrees = {}, {}
-local canvas, touchTime, inTool, hasBuiltTree, hasSpentMoney, treeDrafts, tipText, totalMoney, selectedAreaFlagDraft, sandbox
+local canvas, touchTime, inTool, hasBuiltTree, hasSpentMoney, hasRebuild, treeDrafts, tipText, totalMoney, selectedAreaFlagDraft, sandbox
 local numOfPositions = 0
 local preserveOriginalTrees = TheoTown.getGlobalFunVar("!Sio1GlobalPOT", 0)
 
@@ -119,11 +108,12 @@ local function clear(mode)
 end
 
 local function rebuildOriginalTrees() -- Rebuild the original trees
-	if hasBuiltTrees ~= true and preserveOriginalTrees == 0 and #originalTrees > 0 then
+	if hasBuiltTrees ~= true and preserveOriginalTrees == 0 and #originalTrees > 0 and hasRebuild ~= true then
 		for i = 1, #originalTrees do
 			Builder.buildTree(originalTrees[i].draft, originalTrees[i].x, originalTrees[i].y, originalTrees[i].frame)
 		end
 		originalTrees = {}
+		hasRebuild = true
 	end
 end
 
@@ -142,6 +132,7 @@ local function selectArea(stage)
         
         hasSpentMoney = false
         hasBuiltTree = false
+        hasRebuild = false
         originalTrees = {}
     elseif stage == 2 then
         Builder.buildBuilding("$sio1_flag_AreaEnd_dnswodn48", lastTapPosition.tileX, lastTapPosition.tileY)
@@ -217,7 +208,7 @@ end
 local function showDensity()
     local densityUI = GUI.createDialog{
         icon = Icon.TERRAIN,
-        title = translations[language].density,
+        title = strings.density,
         height = 200,
         width = 300
     }
@@ -226,7 +217,7 @@ local function showDensity()
         vertical = true
     }
     -- Create the slider
-    local line = addLine(translations[language].density, 30, 60)
+    local line = addLine(strings.density, 30, 60)
     local slider = line:addSlider{
         width = 220,
         minValue = 0,
@@ -242,8 +233,8 @@ end
 local function showAbout()
     local aboutUI = GUI.createDialog{
         icon = Icon.ABOUT,
-        title = translations[language].about,
-        text = translations[language].aboutText,
+        title = strings.about,
+        text = strings.aboutText,
         height = 200,
         width = 300
     }
@@ -267,7 +258,7 @@ local function plantTree()
 		    
 		        -- End the loop if there is no enough money
 		        if totalMoney > City.getMoney() and sandbox ~= true then 
-				    Debug.toast(translations[language].noMoney)
+				    Debug.toast(strings.noMoney)
 				    totalMoney = totalMoney - price
 				    break
 		        else
@@ -277,7 +268,7 @@ local function plantTree()
         end
         originalTrees = {} -- Clear the original trees table to disable the rebuild
     else
-	    Debug.toast(translations[language].areaOverSize)
+	    Debug.toast(strings.areaOverSize)
     end
 end
 
@@ -296,7 +287,7 @@ local function showTool()
         y = buttonSizeList.y,
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].close,
+        text = strings.close,
         icon = Icon.CLOSE,
         onClick = function()
             GUI.get("cmdCloseTool"):click()
@@ -308,7 +299,7 @@ local function showTool()
         y = buttonSizeList.y + buttonSizeList.height,
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].plant,
+        text = strings.plant,
         icon = Icon.BUILD,
         onClick = function()
             plantTree()
@@ -320,7 +311,7 @@ local function showTool()
         y = buttonSizeList.y + (2 * buttonSizeList.height),
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].trees,
+        text = strings.trees,
         icon = Icon.TREE,
         onClick = function()
             showTreeDrafts()
@@ -332,11 +323,12 @@ local function showTool()
         y = buttonSizeList.y + (3 * buttonSizeList.height),
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].clear,
+        text = strings.clear,
         icon = Icon.CANCEL,
         onClick = function()
             clear(1)
             touchTime = nil
+            hasRebuild = true
         end
     }
 
@@ -345,7 +337,7 @@ local function showTool()
         y = buttonSizeList.y + (4 * buttonSizeList.height),
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].density,
+        text = strings.density,
         icon = Icon.TERRAIN,
         onClick = function()
             showDensity()
@@ -357,7 +349,7 @@ local function showTool()
         y = buttonSizeList.y + (5 * buttonSizeList.height),
         height = buttonSizeList.height,
         width = buttonSizeList.width,
-        text = translations[language].about,
+        text = strings.about,
         icon = Icon.ABOUT,
         onClick = function()
             showAbout()
@@ -369,6 +361,11 @@ function script:init()
     treeDrafts = Draft.getDrafts()
         :filter(function(d) return d:getType() == "tree" and d:isVisible() end)
     selectedAreaFlagDraft = Draft.getDraft("$sio1_flag_SelectedArea_dnswodn48")
+    
+    -- Address the translation
+    for key, value in pairs(strings) do
+        strings[key] = TheoTown.translateInline(value)
+    end
 end
 
 function script:enterCity()    
