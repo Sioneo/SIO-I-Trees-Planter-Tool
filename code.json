@@ -15,67 +15,9 @@
     "category": "$cat_tree00",
     "meta": {
       "luawrapper": {
-        "script": "sio1.lua",
-        "dev": false
+        "script": "sio1re.lua",
+        "dev": true
       }
     }
-  },
-  {
-    "once": true,
-    "id": "$sio1_dnswodn48_settings_TreePlanter00",
-    "type": "script",
-    "script": "#LuaWrapper",
-    "meta": {
-      "luawrapper": {
-        "script": "settings.lua",
-        "dev": false
-      }
-    }
-  },
-  {
-    "id": "$sio1_flag_AreaBegin_dnswodn48",
-    "type": "decoration",
-    "draw ground": true,
-    "width": 1,
-    "height": 1,
-    "frames": [
-      {
-        "bmp": "flag.png",
-        "handle y": 7,
-        "handle x": -1
-      }
-    ],
-    "hidden": true
-  },
-  {
-    "id": "$sio1_flag_AreaEnd_dnswodn48",
-    "type": "decoration",
-    "draw ground": true,
-    "width": 1,
-    "height": 1,
-    "frames": [
-      {
-        "bmp": "flag.png",
-        "handle y": 7,
-        "handle x": -1
-      }
-    ],
-    "hidden": true
-  },
-  {
-    "id": "$sio1_flag_SelectedArea_dnswodn48",
-    "type": "tree",
-    "draw ground": true,
-    "width": 1,
-    "height": 1,
-    "frames": [
-      {
-        "bmp": "area.png",
-        "handle y": 7,
-        "handle x": -1
-      }
-    ],
-    "hidden": true,
-    "price": 0
   }
 ]

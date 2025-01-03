@@ -1,8 +1,8 @@
 {
   "id": "$Sio1_PluginManifest_dnswodn48",
-  "version": 3,
+  "version": 4,
   "title": "SIO I: Trees Planter Tool",
-  "text": "Version 1.0.2\nSpecial thanks to the TheoTown Team, for more information, please visit https://github.com/Sioneo/SIO-I-Trees-Planter-Tool\n\nVersion 1.0.2 Update: 1.Update translations. 2.Fixed an issue(Though clear button has been clicked, original trees will still be rebuild while closing the tool.)[zh]1.0.2版本\n感谢TheoTown Team在GitHub上的开源代码，这为本插件提供了很大帮助，谢谢！\n本插件允许自由转载，关于更多信息，请访问https://github.com/Sioneo/SIO-I-Trees-Planter-Tool",
+  "text": "Version 1.1.0\nSpecial thanks to the TheoTown Team, for more information, please visit https://github.com/Sioneo/SIO-I-Trees-Planter-Tool\n\nVersion 1.0.2 Update: 1.Update translations. 2.Fixed an issue(Though clear button has been clicked, original trees will still be rebuild while closing the tool.)[zh]1.1.0版本\n感谢TheoTown Team在GitHub上的开源代码，这为本插件提供了很大帮助，谢谢！\n本插件允许自由转载，关于更多信息，请访问https://github.com/Sioneo/SIO-I-Trees-Planter-Tool",
   "author": "dnswodn&TheoTown Team",
   "thumbnail": "preview.png"
 }
